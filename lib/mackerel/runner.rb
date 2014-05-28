@@ -13,12 +13,12 @@ module Mackerel
       @args = args
       cmd = args.shift
 
-      # p cmd
       if Runner.method_defined?(cmd) and cmd != 'run'
-        # args.replace expanded_args if expanded_args
         send(cmd, args)
       else
-        abort "Error: `#{cmd}` command not found."
+        puts "Error: `#{cmd}` command not found.\n\n"
+        send('help', args)
+        abort
       end
     end
 
