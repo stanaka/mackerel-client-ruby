@@ -1,6 +1,5 @@
 require 'optparse'
-require 'pp'
-require 'json'
+require 'json' unless defined? ::JSON
 
 module Mackerel
 
@@ -77,9 +76,14 @@ module Mackerel
           opt.on('--service SERVICE'){|v| params[:service] = v }
           opt.on('--role ROLE')      {|v| params[:role] = v }
           opt.on('--name NAME')      {|v| params[:name] = v }
+          opt.on('--host-id HOSTID') {|v| params[:hostId] = v }
           opt.parse!(args)
           begin
-            res = mc.get_hosts(params)
+            if params[:hostid]
+              res = [ mc.get_host(params[:hostId]) ]
+            else
+              res = mc.get_hosts(params)
+            end
           rescue => msg
             abort "Error: #{msg}"
           end
